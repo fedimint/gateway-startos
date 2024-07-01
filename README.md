@@ -1,6 +1,8 @@
-# Wrapper for Jam
+# Wrapper for Fedimint Lightning Gateway
 
-[Jam](https://github.com/joinmarket-webui/jam/) is a web UI for JoinMarket with focus on user-friendliness. It aims to provide sensible defaults and be easy to use for beginners while still providing the features advanced users expect.
+[Lightning Gateways](https://github.com/) are lightning service providers for Fedimints. Running a lightning gateway lets you connect your lightning node to different Fedimints to earn routing fees for swapping ecash <> lightning.
+
+This Gateway service runs alongside your LND node and connect to multiple Fedimints and provides a UI for managing liquidity across them.
 
 ## Dependencies
 
