@@ -1,5 +1,5 @@
 # Stage 1: Build gatewayd
-FROM fedimint/gatewayd:v0.3.0 AS gatewayd
+FROM fedimint/gatewayd:v0.3.1 AS gatewayd
 
 # Set environment variables for gatewayd
 ENV FM_GATEWAY_DATA_DIR=/gateway_data

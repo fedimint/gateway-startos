@@ -1,5 +1,5 @@
-PKG_ID := $(shell yq e ".id" manifest.yaml)
-PKG_VERSION := $(shell yq e ".version" manifest.yaml)
+PKG_ID := $(shell yq -r '.id' manifest.yaml)
+PKG_VERSION := $(shell yq -r '.version' manifest.yaml)
 TS_FILES := $(shell find ./ -name \*.ts)
 ASSET_PATHS := $(shell find ./assets/compat/*)
 
@@ -7,6 +7,12 @@ ASSET_PATHS := $(shell find ./assets/compat/*)
 .DELETE_ON_ERROR:
 
 all: verify
+
+debug-id:
+	@echo "ID:" $(shell yq e '.id' manifest.yaml)
+
+debug-version:
+	@echo "Version:" $(shell yq e '.version' manifest.yaml)
 
 verify: $(PKG_ID).s9pk
 	@start-sdk verify s9pk $(PKG_ID).s9pk

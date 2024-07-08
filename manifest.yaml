@@ -1,14 +1,13 @@
 # Example written in yaml (toml and json are also acceptable)
 
 # The package identifier used by the OS. This must be unique amongst all other known packages
-id:
-  fedimint-gateway
-  # A human readable service title
+id: fedimint-gateway
+# A human readable service title
 title: "Gateway"
 # Service version - accepts up to four digits, where the last confirms to revisions necessary for StartOS - see documentation: https://github.com/Start9Labs/emver-rs. This value will change with each release of the service.
 version: 0.3.1
 # Release notes for the update - can be a string, paragraph or URL
-release-notes: {}
+release-notes: "Initial release for Fedimint Gateway"
 # The type of license for the project. Include the LICENSE in the root of the project directory. A license is required for a Start9 package.
 license: MIT
 # The repository URL for the package. This repo contains the manifest file (this), any scripts necessary for configuration, backups, actions, or health checks (more below). This key must exist. But could be embedded into the source repository.
