@@ -1,4 +1,4 @@
-jam.s9pk
-image.tar
+*.s9pk
+*.tar
 scripts/*.js
 docker-images/
