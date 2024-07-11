@@ -1,5 +1,20 @@
-# Stage 1: Build gatewayd
+# Stage 1: Build yq binary
+FROM debian:buster AS builder
+
+ARG PLATFORM
+ARG ARCH
+
+RUN apt update && apt install -y ca-certificates
+RUN sed -i "s|http://|https://|g" /etc/apt/sources.list
+RUN apt-get update && apt-get -y upgrade && apt-get install -y -qq --no-install-recommends wget bash
+
+RUN wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${PLATFORM} -O /usr/bin/yq && chmod +x /usr/bin/yq
+
+# Stage 2: Build gatewayd
 FROM fedimint/gatewayd:v0.3.1 AS gatewayd
+
+# Copy yq binary from the builder stage
+COPY --from=builder /usr/bin/yq /bin/yq
 
 # Set environment variables for gatewayd
 ENV FM_GATEWAY_DATA_DIR=/gateway_data
@@ -9,29 +24,9 @@ ENV FM_GATEWAY_PASSWORD=thereisnosecondbest
 ENV FM_GATEWAY_FEES=0,10000
 ENV FM_LND_RPC_ADDR=https://lnd.embassy:10009
 ENV FM_LND_TLS_CERT=/lnd_data/tls.cert
-ENV FM_LND_MACAROON=/lnd_data/data/chain/bitcoin/signet/admin.macaroon
+ENV FM_LND_MACAROON=/lnd_data/data/chain/bitcoin/mainnet/admin.macaroon
 
 ADD ./docker_entrypoint.sh /usr/local/bin/docker_entrypoint.sh
 RUN chmod +x /usr/local/bin/docker_entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/docker_entrypoint.sh"]
-
-# # Set up volumes for gatewayd
-# VOLUME ["/gateway_data"]
-
-# # Stage 2: Build gateway-ui
-# FROM fedimintui/gateway-ui:0.3.0 as gateway-ui
-
-# # Set environment variables for gateway-ui
-# ENV PORT=3001
-# ENV REACT_APP_FM_GATEWAY_API=http://127.0.0.1:8175
-# ENV REACT_APP_FM_GATEWAY_PASSWORD=thereisnosecondbest
-
-# # Expose ports for gateway-ui
-# EXPOSE 3001
-
-# # Final stage: Combine both
-# FROM fedimint/gatewayd:v0.3.0
-
-# # Copy gateway-ui files
-# COPY --from=gateway-ui /usr/share/nginx/html /usr/share/nginx/html

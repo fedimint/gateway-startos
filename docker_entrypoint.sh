@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-
 export HOST_IP=$(ip -4 route list match 0/0 | awk '{print $3}')
 export GATEWAY_CONFIG_PATH=/root
 
@@ -21,6 +20,19 @@ if [[ ! -z $result ]]; then
     echo "Waiting for LND admin macaroon to be generated..."
     sleep 30
   done
+
+  # Create the directory structure for mainnet
+  mkdir -p /lnd_data/data/chain/bitcoin/mainnet
+
+  # Copy all macaroon files to the mainnet directory
+  cp /mnt/lnd/*.macaroon /lnd_data/data/chain/bitcoin/mainnet/
+
+  # Copy the TLS certificate
+  cp /mnt/lnd/tls.cert /lnd_data/tls.cert
 fi
+
+# Set LND address
+export LND_ADDRESS='lnd.embassy'
+export LND_IP=$(getent hosts $LND_ADDRESS | awk '{ print $1 }')
 
 exec tini -g -- gatewayd lnd
