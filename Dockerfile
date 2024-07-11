@@ -6,9 +6,9 @@ ARG ARCH
 
 RUN apt update && apt install -y ca-certificates
 RUN sed -i "s|http://|https://|g" /etc/apt/sources.list
-RUN apt-get update && apt-get -y upgrade && apt-get install -y -qq --no-install-recommends wget bash
-
+RUN apt-get update && apt-get -y upgrade && apt-get install -y -qq --no-install-recommends wget bash iproute2 gawk
 RUN wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${PLATFORM} -O /usr/bin/yq && chmod +x /usr/bin/yq
+
 
 # Stage 2: Build gatewayd
 FROM fedimint/gatewayd:v0.3.1 AS gatewayd
